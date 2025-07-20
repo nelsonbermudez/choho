@@ -1,0 +1,1 @@
+En esta carpeta colocar los archivos de importacion en excel para analisis de las llantas
