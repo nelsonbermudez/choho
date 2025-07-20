@@ -1,0 +1,2 @@
+En esta carpeta se coloca los archivos de excel originales de importancion.
+Estos archivos debe contener la pagina DatosParte1

@@ -1,0 +1,114 @@
+{
+  "nombre": "Diccionario de Expresiones Regulares para Procesamiento de Archivos de Importación",
+  "version": "1.1",
+  "descripcion": "Conjunto de expresiones regulares para normalización y limpieza de datos de importación",
+  "expresiones_regulares": {
+    "normalizar_cantidad_unidad_decimales": {
+      "patron": "(\\d+\\.00)\\s+UNIDAD",
+      "reemplazo": ", CANTIDAD: \\1 UNIDAD",
+      "descripcion": "Normaliza cantidades con decimales seguidas de UNIDAD",
+      "ejemplos": {
+        "entrada": "408.00 UNIDAD PRODUCTO",
+        "salida": ", CANTIDAD: 408.00 UNIDAD PRODUCTO"
+      }
+    },
+    "normalizar_cantidad_unidad_enteros": {
+      "patron": "(\\d+)\\s+UNIDAD(?!AD)",
+      "reemplazo": ", CANTIDAD: \\1 UNIDAD",
+      "descripcion": "Normaliza cantidades enteras seguidas de UNIDAD",
+      "ejemplos": {
+        "entrada": "560 UNIDAD PRODUCTO",
+        "salida": ", CANTIDAD: 560 UNIDAD PRODUCTO"
+      }
+    },
+    "separar_cantidad_producto": {
+      "patron": "(\\d+(?:\\.00)?)\\s*UNIDAD\\s+PRODUCTO:",
+      "reemplazo": ", CANTIDAD: \\1 UNIDAD, PRODUCTO:",
+      "descripcion": "Separa cantidad y producto con formato estándar",
+      "ejemplos": {
+        "entrada": "1700.00 UNIDAD PRODUCTO: BATERIA",
+        "salida": ", CANTIDAD: 1700.00 UNIDAD, PRODUCTO: BATERIA"
+      }
+    },
+    "normalizar_espacios_antes_producto": {
+      "patron": "(\\d+)\\s*UNIDADPRODUCTO:",
+      "reemplazo": ", CANTIDAD: \\1 UNIDAD, PRODUCTO:",
+      "descripcion": "Corrige cuando UNIDAD y PRODUCTO están pegados",
+      "ejemplos": {
+        "entrada": "52 UNIDADPRODUCTO: BATERIA",
+        "salida": ", CANTIDAD: 52 UNIDAD, PRODUCTO: BATERIA"
+      }
+    },
+    "normalizar_cantidad_punto_coma": {
+      "patron": ";*(\\d{1,6})\\s*(?:U(?!\\d)|UND|UNIDAD|PCS|PCE|PIE|PC\\sS)\\b",
+      "reemplazo": ", CANTIDAD: \\1 U",
+      "descripcion": "Normaliza cantidades con punto y coma seguido de números y U",
+      "ejemplos": {
+        "entrada": "PRODUCTO; 40 U",
+        "salida": "PRODUCTO, CANTIDAD: 40 U"
+      }
+    },
+    "normalizar_cantidad_coma": {
+      "patron": ",\\s*(\\d{1,6})\\s*U(?!NIDAD)",
+      "reemplazo": ", CANTIDAD: \\1 U",
+      "descripcion": "Normaliza cantidades con coma seguida de números y U (evita UNIDAD)",
+      "ejemplos": {
+        "entrada": "PRODUCTO, 560 U",
+        "salida": "PRODUCTO, CANTIDAD: 560 U"
+      }
+    },
+    "normalizar_cantidad_espacio": {
+      "patron": "\\s*(\\d{1,6})\\s*U(?!NIDAD)",
+      "reemplazo": ", CANTIDAD: \\1 U",
+      "descripcion": "Normaliza cantidades con coma seguida de números y U (evita UNIDAD)",
+      "ejemplos": {
+        "entrada": "PRODUCTO, 560 U",
+        "salida": "PRODUCTO, CANTIDAD: 560 U"
+      }
+    },
+    "eliminar_decimales": {
+      "patron": "(\\d+)[.,]00\\b",
+      "reemplazo": "\\1",
+      "descripcion": "Elimina decimales .00 o ,00 de números",
+      "ejemplos": {
+        "entrada": "1700.00 UNIDAD",
+        "salida": "1700 UNIDAD"
+      }
+    },
+    "normalizar_punto_coma_mercancia": {
+      "patron": ";\\s*MERCANCIA\\s+NUEVA[.;]*\\s*\\|",
+      "reemplazo": "; MERCANCIA NUEVA.|",
+      "descripcion": "Normaliza el final de descripción con mercancía nueva",
+      "ejemplos": {
+        "entrada": "; MERCANCIA NUEVA.;|",
+        "salida": "; MERCANCIA NUEVA.|"
+      }
+    },
+    "limpiar_espacios_multiples": {
+      "patron": "\\s+",
+      "reemplazo": " ",
+      "descripcion": "Reemplaza múltiples espacios consecutivos por uno solo",
+      "ejemplos": {
+        "entrada": "TEXTO    CON     ESPACIOS",
+        "salida": "TEXTO CON ESPACIOS"
+      }
+    },
+    "patron_palabra_cantidad": {
+      "patron": "[A-Z]CANTIDAD\\s*:\\s*(\\d+)",
+      "reemplazo": "[A-Z], CANTIDAD: \\1",
+      "descripcion": "Normaliza cantidad precedida de una letra mayúscula"
+    }
+  },
+  "patrones_especiales": {
+    "patron_pipe_cantidad": {
+      "patron": "\\|\\s*(\\d+)\\s*\\|\\s*U\\s*$",
+      "reemplazo": ", CANTIDAD: \\1|U",
+      "descripcion": "Maneja cantidades al final entre pipes"
+    },
+    "patron_serial_numeros": {
+      "patron": "SERIAL:\\s*([A-Z0-9/\\s]+)",
+      "reemplazo": ", SERIAL: \\1",
+      "descripcion": "Normaliza el formato de números de serie"
+    }
+  }
+}
