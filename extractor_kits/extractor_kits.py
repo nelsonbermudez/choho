@@ -4,7 +4,7 @@ import json
 import pandas as pd
 import os
 from datetime import datetime
-from typing import List, Dict, Optional, Tuple
+#from typing import List, Dict, Optional, Tuple
 
 
 def procesar_archivos_raw(directorio_salida, archivo_entrada):
@@ -12,7 +12,7 @@ def procesar_archivos_raw(directorio_salida, archivo_entrada):
     Procesa archivos Excel de datos crudos y genera un archivo CSV unificado.
     """
     excel_dir = 'dataraw'
-    excel_dir = os.path.join(excel_dir, excel_dir)
+    #excel_dir = os.path.join(excel_dir, excel_dir)
     excel_files = [f for f in os.listdir(excel_dir) if f.endswith('.xlsx') and not f.startswith('~$')]
 
     dfs = {}
@@ -559,7 +559,7 @@ def procesar_archivo_kits(directorio_salida, archivo_entrada, archivo_salida, ar
 
 
 if __name__ == "__main__":
-    directorio_salida = 'extractor_general/data'
+    directorio_salida = 'data'
     archivo_entrada = "dataraw.csv"
     archivo_salida = "resultado_kits_procesado.csv"
     archivo_diccionario = "diccionario_kits.json"
