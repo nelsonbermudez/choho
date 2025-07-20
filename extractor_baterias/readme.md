@@ -15,6 +15,21 @@ Este sistema está diseñado para procesar y normalizar datos de importación co
 
 ## Arquitectura del Sistema
 
+### Manejo de entorno virtual para Python
+
+1. **Lógica de creacion del entorno**
+Se crea usando la libreria venv (no restrictivo a Conda) y correr el comando
+`python3 -m venv nombre_entorno`
+Activar el entorno virtual usando el comando `source nombre_entorno/bin/activate`
+Para desactivar el entorno se usa el comando `deactivate`
+Por recomendación se debe evitar instalar las librerias fuera del entorno virtual.
+
+2. **Uso de instalacion**
+2.1. Se activa el entorno virtual `source nombre_entorno/bin/activate`
+2.2. Se instalan las liberias dependientes `pip install -r requirements.txt`
+2.3. En caso que no se tenga actualizado el PIP, usar el comando `pip install --upgrade pip` y luego ejecutar el comando 2.2.
+
+
 ### Componentes Principales
 
 1. **Procesador de Archivos Excel** (`procesar_archivos_raw`)
