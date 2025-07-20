@@ -41,7 +41,7 @@ Por recomendación se debe evitar instalar las librerias fuera del entorno virtu
 
 ```
 proyecto/
-├── extractor_general/
+├── extractor_baterias/
 │   ├── dataraw/          # Archivos Excel de entrada
 │   └── data/             # Archivos procesados de salida
 ├── diccionario.json      # Configuración de normalización
@@ -70,7 +70,7 @@ import os               # Operaciones del sistema de archivos
 - `archivo_entrada`: Nombre del archivo CSV resultante
 
 **Proceso**:
-1. Busca archivos Excel en `extractor_general/dataraw/`
+1. Busca archivos Excel en `extractor_baterias/dataraw/`
 2. Lee la hoja 'DatosParte1' de cada archivo
 3. Concatena todos los DataFrames en uno unificado
 4. Normaliza las descripciones combinando múltiples columnas de detalle
@@ -253,7 +253,7 @@ numero_aceptacion,referencia,marca,cantidad,cantidad_original
 
 ```python
 if __name__ == "__main__":
-    directorio_salida = 'extractor_general/data'
+    directorio_salida = 'extractor_baterias/data'
     archivo_entrada = "dataraw.csv"
     archivo_salida = "resultado_procesado.csv"
     archivo_diccionario = "diccionario.json"
@@ -272,7 +272,7 @@ if __name__ == "__main__":
 
 ### Requisitos de Archivos de Entrada
 
-1. **Archivos Excel**: Deben estar en `extractor_general/dataraw/`
+1. **Archivos Excel**: Deben estar en `extractor_baterias/dataraw/`
 2. **Hoja requerida**: 'DatosParte1'
 3. **Columnas necesarias**:
    - Número de Aceptación
