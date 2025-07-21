@@ -1,0 +1,53 @@
+Orden de Ejecución del Código
+
+Función procesar_archivos_raw() - Procesa archivos Excel del directorio 'dataraw' y genera un CSV unificado
+
+Lee archivos .xlsx de la hoja 'DatosParte1'
+Concatena todos los DataFrames
+Remueve caracteres '|' de los datos
+Normaliza descripciones de mercancía combinando columnas detalladas
+Genera archivo CSV final con separador '|'
+
+
+Función cargar_diccionario_kits() - Carga configuración desde archivo JSON para normalización de texto
+Función cargar_expresiones_regulares_kits() - Carga patrones regex específicos para kits desde archivo JSON
+Función limpiar_y_normalizar_texto_kits() - Aplica transformaciones de limpieza al texto
+
+Reemplaza caracteres especiales
+Aplica expresiones regulares configuradas
+Convierte a mayúsculas y normaliza espacios
+
+
+Función aplicar_reemplazos_diccionario_kits() - Aplica reemplazos usando diccionario de variantes
+
+Normaliza variantes de productos, marcas, referencias, modelos
+Reemplaza marcas conocidas y partes variantes
+
+
+Funciones de extracción de datos:
+
+extraer_productos() - Extrae nombres de productos usando patrones regex
+extraer_marcas_kits() - Extrae marcas específicas para kits
+extraer_referencias_kits() - Extrae referencias de productos
+extraer_modelos() - Extrae modelos de productos
+extraer_cantidades_kits() - Extrae cantidades numéricas
+detectar_cadenas() - Detecta si el producto es una cadena o kit de arrastre
+extraer_pasos_medidas() - Extrae medidas y pasos de cadenas
+
+
+Función procesar_linea_kits() - Procesa una línea completa del archivo
+
+Aplica limpieza y normalización
+Extrae todos los datos estructurados
+Genera registros únicos combinando toda la información
+
+
+Función procesar_archivo_kits() - Función principal que procesa el archivo completo
+
+Carga configuraciones (diccionario y expresiones regulares)
+Procesa línea por línea el archivo de entrada
+Elimina duplicados
+Genera archivo de salida con estadísticas
+
+
+Bloque principal if __name__ == "__main__" - Ejecuta el procesamiento con parámetros predefinidos

@@ -80,6 +80,8 @@ def cargar_diccionario_kits(archivo_diccionario):
     """
     Carga el diccionario de configuración para kits y cadenas desde un archivo JSON.
     """
+    print(f"Entrando a cargar_diccionario_kits")
+
     try:
         with open(archivo_diccionario, 'r', encoding='utf-8') as archivo:
             diccionario = json.load(archivo)
@@ -99,10 +101,12 @@ def cargar_expresiones_regulares_kits(archivo_expresiones):
     """
     Carga las expresiones regulares específicas para kits desde un archivo JSON.
     """
+    print(f"Entrando a cargar_expresiones_regulares_kits")
+
     try:
         with open(archivo_expresiones, 'r', encoding='utf-8') as archivo:
             expresiones = json.load(archivo)
-            return expresiones.get("expresiones_regulares_kits", {})
+            return expresiones.get("expresiones_regulares", {})
     except FileNotFoundError:
         print(f"Error: No se pudo encontrar el archivo de expresiones regulares {archivo_expresiones}")
         return {}
@@ -113,53 +117,61 @@ def cargar_expresiones_regulares_kits(archivo_expresiones):
         print(f"Error al cargar las expresiones regulares: {e}")
         return {}
 
+def aplicar_expresiones_regulares_ordenadas(texto, expresiones_regulares):
+    """
+    Aplica todas las expresiones regulares de normalización al texto en orden específico.
+    """
+    orden_aplicacion = [
+        # "eliminar_decimales",
+        "normalizar_cantidad_unidad_decimales",
+        "normalizar_cantidad_unidad_enteros", 
+        "separar_cantidad_producto",
+        "normalizar_espacios_antes_producto",
+        "normalizar_cantidad_punto_coma",
+        "normalizar_cantidad_coma",
+        "normalizar_punto_coma_mercancia",
+        "limpiar_espacios_multiples",
+        "patron_palabra_cantidad",
+        "normalizar_cantidad_espacio"
+    ]
+    
+    for nombre_expr in orden_aplicacion:
+        if nombre_expr in expresiones_regulares:
+            config = expresiones_regulares[nombre_expr]
+            patron = config.get("patron", "")
+            reemplazo = config.get("reemplazo", "")
+            if patron:
+                try:
+                    texto = re.sub(patron, reemplazo, texto)
+                except re.error:
+                    continue
+    
+    return texto.strip()
 
 def limpiar_y_normalizar_texto_kits(texto, expresiones_regulares):
     """
     Aplica transformaciones de limpieza y normalización específicas para kits y cadenas.
     """
+    print(f"Entrando a limpiar_y_normalizar_texto_kits")
+
+    # Convertir a mayúsculas y normalizar espacios
+    texto = texto.upper()
+    texto = re.sub(r'\s+', ' ', texto).strip()
+    
     # Reemplazos específicos para kits y cadenas
     texto = texto.replace("|", ":")
     texto = texto.replace("_", ":")
     texto = texto.replace("=", ":")
     texto = texto.replace("(", " ")
     texto = texto.replace(")", " ")
-    texto = texto.replace("CADENA", ", CADENA")
-    texto = texto.replace("CHAIN", ", CADENA")
-    texto = texto.replace("CADENILLA", ", CADENA")
-    texto = texto.replace("KIT ARRASTRE", ", KIT")
-    texto = texto.replace("KIT DE ARRASTRE", ", KIT")
-    texto = texto.replace("PRODUCTO:", ", PRODUCTO:")
-    texto = texto.replace("MARCA:", ", MARCA:")
-    texto = texto.replace("REFERENCIA:", ", REFERENCIA:")
-    texto = texto.replace("MODELO:", ", MODELO:")
-    texto = texto.replace("CANTIDAD:", ", CANTIDAD:")
-    texto = texto.replace("PASO:", ", PASO:")
-    texto = texto.replace("MEDIDA:", ", MEDIDA:")
-    texto = texto.replace("UNIDADES:", "UNIDADES.")
-    texto = texto.replace("UND", "UNIDADES")
-    texto = texto.replace("PIEZA", "UNIDADES")
-    texto = texto.replace("PIEZ", "UNIDADES")
-    texto = texto.replace("Nombre Comercial:", ", PRODUCTO:")
-    texto = texto.replace("Marca C:", ", MARCA:")
-    texto = texto.replace("Ref:", ", REFERENCIA:")
-    texto = texto.replace(";", ",")
-    texto = texto.replace("/", ",")
-    
-    # Aplicar expresiones regulares específicas para kits
-    for nombre_expr, config in expresiones_regulares.items():
-        patron = config.get("patron", "")
-        reemplazo = config.get("reemplazo", "")
-        if patron:
-            try:
-                texto = re.sub(patron, reemplazo, texto)
-            except re.error:
-                continue
-    
-    # Convertir a mayúsculas y normalizar espacios
-    texto = texto.upper()
+    texto = texto.replace("/", " ")
+
+    # Aplicar expresiones regulares de normalización
+    texto = aplicar_expresiones_regulares_ordenadas(texto, expresiones_regulares)
+
+    # Normalizar espacios múltiples
     texto = re.sub(r'\s+', ' ', texto).strip()
-    
+
     return texto
 
 
@@ -168,6 +180,7 @@ def aplicar_reemplazos_diccionario_kits(texto, diccionario):
     Aplica reemplazos específicos para kits usando el diccionario.
     """
     # Extraer variantes del diccionario para kits
+    segun_variants = diccionario.get("segun_variants", [])
     producto_variants = diccionario.get("producto_variants", [])
     marca_variants = diccionario.get("marca_variants", [])
     referencia_variants = diccionario.get("referencia_variants", [])
@@ -176,13 +189,23 @@ def aplicar_reemplazos_diccionario_kits(texto, diccionario):
     cadena_variants = diccionario.get("cadena_variants", [])
     kit_variants = diccionario.get("kit_variants", [])
     paso_variants = diccionario.get("paso_variants", [])
-    marcas_conocidas = diccionario.get("marcas_conocidas_kits", {})
+    marcas_conocidas = diccionario.get("marcas_conocidas", {})
+    partes_variants = diccionario.get("partes_variants", {})
+    referencia_modelo_variants = diccionario.get("referencia_modelo_variants", {})
+    referencia_segun_variant = diccionario.get("referencia_segun_variant", {})
+    unidades_variants = diccionario.get("unidades_medida", [])
     
+    #Aplicar reemplazos de "SEGUN"
+    for variant in segun_variants:
+        if variant in texto:
+                texto = texto.replace(variant, "SEGUN")
+
     # Aplicar reemplazos de productos
     for variant in producto_variants:
         if variant in texto:
             texto = texto.replace(variant, ", PRODUCTO:")
     
+     
     # Aplicar reemplazos de marcas
     for variant in marca_variants:
         if variant in texto:
@@ -206,23 +229,56 @@ def aplicar_reemplazos_diccionario_kits(texto, diccionario):
     # Aplicar reemplazos de cadenas
     for variant in cadena_variants:
         if variant in texto:
-            texto = texto.replace(variant, ", CADENA")
+            texto = texto.replace(variant, ", CADENA:")
     
     # Aplicar reemplazos de kits
     for variant in kit_variants:
         if variant in texto:
-            texto = texto.replace(variant, ", KIT")
+            texto = texto.replace(variant, ", KIT:")
     
     # Aplicar reemplazos de pasos
     for variant in paso_variants:
         if variant in texto:
             texto = texto.replace(variant, ", PASO:")
+
+    # # Aplicar reemplazos de unidades
+    # for variant in unidades_variants:
+    #     if variant in texto:
+    #         texto = texto.replace(variant, " UNIDADES, ")
+   
     
-    # Reemplazar marcas conocidas específicas para kits
-    for variant, reemplazo in marcas_conocidas.items():
+     #Reemplazar diccionario de marcas conocidas
+    for variant in marcas_conocidas:
         if variant in texto:
-            texto = texto.replace(variant, reemplazo)
+            # reemplazar variante por el valor de reemplazo del diccionario
+            reemplazo = diccionario.get("marcas_conocidas", {}).get(variant, "")
+            if reemplazo:
+                texto = texto.replace(variant, reemplazo)  
     
+    # Reemplazar partes variantes
+    for variant in partes_variants:
+        if variant in texto:
+            # reemplazar variante por el valor de reemplazo del diccionario
+            reemplazo = diccionario.get("partes_variants", {}).get(variant, "")
+            if reemplazo:
+                texto = texto.replace(variant, reemplazo)
+
+    # Reemplazar referencias y modelos variantes
+    for variant in referencia_modelo_variants:
+        if variant in texto:
+            # reemplazar variante por el valor de reemplazo del diccionario
+            reemplazo = diccionario.get("referencia_modelo_variants", {}).get(variant, "")
+            if reemplazo:
+                texto = texto.replace(variant, reemplazo)
+    
+    # Reemplazar referencias según variante
+    for variant in referencia_segun_variant:
+        if variant in texto:
+            # reemplazar variante por el valor de reemplazo del diccionario
+            reemplazo = diccionario.get("referencia_segun_variant", {}).get(variant, "")
+            if reemplazo:
+                texto = texto.replace(variant, reemplazo)
+
     return texto
 
 
@@ -395,12 +451,14 @@ def procesar_linea_kits(descripcion, numero_aceptacion, cantidad_original, expre
     """
     Procesa una línea completa del archivo de importación para kits y cadenas.
     """
+    print(f"Entrando a procesar_linea_kits")
+
     # Limpiar y normalizar el texto
     texto_limpio = limpiar_y_normalizar_texto_kits(descripcion, expresiones_regulares)
-    
+ 
     # Aplicar reemplazos del diccionario
     texto_procesado = aplicar_reemplazos_diccionario_kits(texto_limpio, diccionario)
-    
+
     # Extraer datos estructurados
     productos = extraer_productos(texto_procesado)
     marcas = extraer_marcas_kits(texto_procesado)
@@ -410,9 +468,9 @@ def procesar_linea_kits(descripcion, numero_aceptacion, cantidad_original, expre
     es_cadena = detectar_cadenas(texto_procesado)
     pasos_medidas = extraer_pasos_medidas(texto_procesado)
     
-    # Procesar cantidad original
+   # Procesar cantidad original
     try:
-        cantidad_limpia = re.sub(r"(\d+)[.,]00\b", r"\1", str(cantidad_original))
+        cantidad_limpia = re.sub(r"(\d+)[.,\s]00\b", r"\1", str(cantidad_original))
         cantidad_original_int = int(float(cantidad_limpia))
     except (ValueError, TypeError):
         cantidad_original_int = 0
@@ -421,9 +479,15 @@ def procesar_linea_kits(descripcion, numero_aceptacion, cantidad_original, expre
     if not cantidades or cantidades == [0]:
         cantidades = [cantidad_original_int]
     
+    #Crear archivo debug 
+    debug_file = 'debug_kits.txt'
+    with open(debug_file, 'w', encoding='utf-8') as f: 
+        for producto in productos:
+            f.write(f"Producto: {producto}\n")
+
     # Crear registros únicos
     registros = []
-    max_elementos = max(len(productos), len(marcas), len(referencias), len(modelos), len(cantidades), 1)
+    max_elementos = max(len(productos), len(marcas), len(referencias), len(modelos), 1)
     
     for i in range(max_elementos):
         producto = productos[min(i, len(productos)-1)] if productos else 'NO ESPECIFICADO'
@@ -441,14 +505,16 @@ def procesar_linea_kits(descripcion, numero_aceptacion, cantidad_original, expre
             'cantidad': cantidad,
             'unidad': 'UNIDADES',
             'es_cadena': 'SÍ' if es_cadena else 'NO',
-            'pasos_medidas': ', '.join(pasos_medidas),
+            'pasos_medidas': 'N/A', 
+            # Verificacion de los pasos de las cadenas
+            #'pasos_medidas': ', '.join(pasos_medidas),
             'cantidad_original': cantidad_original,
             'fecha_procesamiento': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         }
         
         if registro not in registros:
             registros.append(registro)
-    
+
     return registros
 
 
@@ -456,13 +522,21 @@ def procesar_archivo_kits(directorio_salida, archivo_entrada, archivo_salida, ar
     """
     Función principal que procesa el archivo de importación completo para kits y cadenas.
     """
+    
+    print(f"Entrando a procesar_archivo_kits")
+    
     # Cargar configuraciones
     diccionario = cargar_diccionario_kits(archivo_diccionario)
     if diccionario is None:
         return
-    
+        
     expresiones_regulares = cargar_expresiones_regulares_kits(archivo_expresiones)
     
+    # Debug expresiones_regulares y mostrar las expresiones cargadas
+    if not expresiones_regulares:
+        print("No se encontraron expresiones regulares para kits. Asegúrese de que el archivo JSON esté correctamente configurado.")
+        return
+
     # Procesar archivo línea por línea
     resultados = []
     lineas_procesadas = 0
@@ -536,7 +610,7 @@ def procesar_archivo_kits(directorio_salida, archivo_entrada, archivo_salida, ar
                 'cantidad', 'unidad', 'es_cadena', 'pasos_medidas', 'cantidad_original', 
                 'fecha_procesamiento'
             ]
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames, delimiter='|')
             
             writer.writeheader()
             for resultado in registros_unicos:
@@ -565,8 +639,8 @@ if __name__ == "__main__":
     archivo_diccionario = "diccionario_kits.json"
     archivo_expresiones = "expresiones_regulares_kits.json"
     
-    print(f"Inicio de proceso de archivos de Excel para Kits")
-    procesar_archivos_raw(directorio_salida, archivo_entrada)
+    # print(f"Inicio de proceso de archivos de Excel para Kits")
+    #procesar_archivos_raw(directorio_salida, archivo_entrada)
 
     print(f"Inicio de proceso de archivo de Kits y Cadenas")
     procesar_archivo_kits(directorio_salida, archivo_entrada, archivo_salida, archivo_diccionario, archivo_expresiones)
