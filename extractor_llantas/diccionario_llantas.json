@@ -1,0 +1,175 @@
+{
+    "nombre": "Diccionario Principal para Procesamiento de Archivos de Importación",
+    "version": "1.1",
+    "descripcion": "Diccionario completo con variantes de palabras clave y correcciones",
+
+    "producto_variants": [
+        " PRODUCTO:",
+        " P RODUCTO:",
+        " PR ODUCTO:",
+        " PRO DUCTO:",
+        " PROD UCTO:",
+        " PRODU CTO:",
+        " PRODUCT O:"
+    ],
+    "segun_variants": [
+        "SEGUN",
+        "S EGUN",
+        "SE GUN",
+        "SEG UN",
+        "SEGU N"
+
+    ],
+    "factura_variants": [
+       "FACTURA"
+    ],
+    "referencia_variants": [
+        "REFERENCIA",
+        "R EFERENCIA",
+        "RE FERENCIA",
+        "REF ERENCIA",
+        "REFE RENCIA",
+        "REFER ENCIA",
+        "REFEREN CIA",
+        "REFERENC IA",
+        "REFERENCI A"
+    ],
+    "marca_variants": [
+        "MARCA ",
+        "M ARCA ",
+        "MA RCA ",
+        "MAR CA ",
+        "MARC A "
+    ],
+    "cadena_variants": [
+        "CADENILLA"
+    ],
+    "kit_variants": [
+        "KIT",
+        "K IT",
+        "KI T",
+        "KITS",
+        "K ITS",
+        "KI TS"
+    ],
+    "paso_variants": [
+        "PASO"
+    ],
+    "cantidad_variants": [
+        "QTY.",
+        "QTY",
+        " CANT ",
+        " CANT. ",
+        "CANT.",
+        "CANT:",
+        " CANTIDAD:",
+        "CANTIDAD:",
+        "C ANTIDAD",
+        "CA NTIDAD",
+        "CAN TIDAD",
+        "CANTI DAD",
+        "CANTID AD",
+        "CANTIDA D",
+        "CANTIDADFACTURADA",
+        ",CANTIDAD "
+    ],
+    "partes_variants": {
+        "A RANDELA": "ARANDELA ",
+        "AR ANDELA": "ARANDELA ",
+        "ARA NDELA": "ARANDELA ",
+        "ARAN DELA": "ARANDELA ",
+        "ARANDE LA": "ARANDELA ",
+        "ARAND ELA": "ARANDELA ",
+        "ARANDEL A": "ARANDELA ",
+        "PI¿ON" : "PIÑON",
+        "PI?ON" : "PIÑON",
+        "P I?ON" : "PIÑON",
+        "P I¿ON" : "PIÑON",
+        "PI ¿ON" : "PIÑON",
+        "PI¿ ON" : "PIÑON",
+        "PI¿O N" : "PIÑON",
+        "PI ?ON" : "PIÑON",
+        "PI? ON" : "PIÑON",
+        "PI?O N" : "PIÑON",
+        "PI??N" : "PIÑON",
+        "PINON" : "PIÑON",
+        "ARRATRE" : "ARRASTRE",
+        "K IT": "KIT ",
+        "KI T": "KIT ",
+        "KIT ": "KIT ",
+        "A RRASTRE": "ARRASTRE ",
+        "ARR ASTRE": "ARRASTRE ",
+        "ARRA STRE": "ARRASTRE ",
+        "ARRAS TRE": "ARRASTRE ",
+        "ARRAST RE": "ARRASTRE ",
+        "ARRASTR E": "ARRASTRE ",
+        "CU?A": "CUÑA",
+        "CU¿A": "CUÑA",
+        "TRASERO": " TRASERO",
+        "SENSORVELOCIMETRO": "SENSOR VELOCIMETRO",
+        "SOPORTTE MOTOR": "SOPORTE MOTOR"
+
+    },
+    "referencia_modelo_variants": {
+        "ARANDELADUKE": "ARANDELA DUKE",
+        " DUKE200": "DUKE 200",
+        " D UKE": "DUKE ",
+        " DU KE": "DUKE ",
+        " DUK E": "DUKE ", 
+        ",KIT AJUSTE CU" : "-KIT AJUSTE CU"
+    },
+    "codigo_variants": [
+        " CODIGO "
+    ],
+  "marcas_conocidas": {
+    "K TM": "KTM",
+    "KT M": "KTM",
+    "KTM": "KTM "
+ },
+  "referencia_segun_variant":{
+    "SEGUN RECONOCIMIENTO:": " ",
+    "SEGUN R ECONOCIMIENTO:": " ",
+    "SEGUN RE CONOCIMIENTO:": " ",
+    "SEGUN REC ONOCIMIENTO:": " ",
+    "SEGUN RECO NOCIMIENTO:": " ",
+    "SEGUN RECON OCIMIENTO:": " ",
+    "SEGUN RECONO CIMIENTO:": " ",
+    "SEGUN RECONOC IMIENTO:": " ",
+    "SEGUN RECONOCI MIENTO:": " ",
+    "SEGUN RECONOCIM IENTO:": " ",
+    "SEGUN RECONOCIMI ENTO:": " ",
+    "SEGUN RECONOCIME NTO:": " ",
+    "SEGUN RECONOCIMEN TO:": " ",
+    "SEGUN RECONOCIMENT O:": " ",
+    "SEGUNRECONOCIMIENTO:": " ",
+    "SEGUNFACTURA": " ",
+    "SEGUN FACTURA": " ",
+    "SEGUN F ACTURA": " ",
+    "SEGUN FA CTURA": " ",
+    "SEGUN FAC TURA": " ",
+    "SEGUN FACT URA": " ",
+    "SEGUN FACTU RA": " ",
+    "SEGUN FACTUR A": " ",
+    "SEGUN RECONOCIMIENTO ": " ",
+    "SEGUN RECONOCIMIENTO :": " ",
+    "SEGUN R ECONOCIMIENTO ": " ",
+    "SEGUN RE CONOCIMIENTO ": " ",
+    "SEGUN REC ONOCIMIENTO ": " ",
+    "SEGUN RECO NOCIMIENTO ": " ",
+    "SEGUN RECON OCIMIENTO ": " ",
+    "SEGUN RECONO CIMIENTO ": " ",
+    "SEGUN RECONOC IMIENTO ": " ",
+    "SEGUN RECONOCI MIENTO ": " ",
+    "SEGUN RECONOCIM IENTO ": " ",
+    "SEGUN RECONOCIMI ENTO ": " ",
+    "SEGUN RECONOCIME NTO ": " ",
+    "SEGUN RECONOCIMEN TO ": " ",
+    "SEGUN RECONOCIMENT O ": " ",
+    "SEGUNRECONOCIMIENTO ": " ",
+    "SEGUN RECONOCIMIENT O": " "
+
+  },
+  "unidades_medida": [
+    "UNIDAD", "UNIDADES", "U", "PCS", "PIECES", "CADA", "C/U", " U NIDADES"
+  ]
+}
